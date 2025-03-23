@@ -1,266 +1,268 @@
-# BullBullet - DogRun
+# BullBullet - Agility
 
-BullBullet は、PyBullet を使用して四足歩行ロボットのシミュレーションを行うためのフレームワークです。歩容パターンの生成、障害物の回避、ゴールへの到達など、基本的なロボット制御タスクを実験できます。また、強化学習（PPO アルゴリズム）を用いた自律的な行動の獲得を目指します。
+![BullBullet Simulation](./bullbullet.png "BullBullet Simulation")
 
-_開発者: Shun Aizawa_
+BullBullet is a framework for simulating quadruped robots using PyBullet. It allows experimentation with basic robot control tasks such as gait pattern generation, obstacle avoidance, and goal reaching. It also aims to achieve autonomous behavior acquisition using reinforcement learning (PPO algorithm).
 
-## 特徴
+_Developers: Aizawa, Otsuka_
 
-- 複数の歩容パターン（トロット、ウォーク、バウンドなど）のサポート
-- LiDAR センサーによる環境認識
-- 障害物コースの自動生成（シンプル、高密度、ランダムの 3 種類）
-- ゴール達成機能
-- カスタマイズ可能な環境とロボットパラメータ
-- コマンドラインからの簡単な操作
-- 強化学習モード
-  - PPO（Proximal Policy Optimization）アルゴリズムによる学習
-  - カスタマイズ可能な報酬関数
-  - トレーニングと評価の分離
-  - 学習曲線の自動プロット
-  - ログ出力
+## Features
 
-## インストール
+- Support for multiple gait patterns (trot, walk, bound, etc.)
+- Environment recognition using LiDAR sensors
+- Automatic generation of obstacle courses (three types: simple, high-density, and random)
+- Goal achievement functionality
+- Customizable environment and robot parameters
+- Simple operation from the command line
+- Reinforcement learning mode
+  - Learning through PPO (Proximal Policy Optimization) algorithm
+  - Customizable reward function
+  - Separation of training and evaluation
+  - Automatic plotting of learning curves
+  - Log output
 
-### 前提条件
+## Installation
 
-- Python 3.6 以上
-- pip（Python パッケージマネージャー）
+### Prerequisites
 
-### 手順
+- Python 3.6 or higher
+- pip (Python package manager)
 
-1. リポジトリをクローン：
+### Steps
+
+1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/bull_bullet_dogrun.git
-cd bull_bullet_dogrun
+git clone https://github.com/Aizawa-Shun/BullBullet.git
+cd BullBullet
 ```
 
-2. 依存パッケージのインストール：
+2. Install dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## 使い方
+## Usage
 
-### 基本的な実行
+### Basic Execution
 
-通常のシミュレーションモードを実行するには：
+To run normal simulation mode:
 
 ```bash
 python main.py
 ```
 
-### コマンドラインオプション
+### Command Line Options
 
-BullBullet は様々なコマンドラインオプションをサポートしています：
+BullBullet supports various command line options:
 
-#### 基本オプション
+#### Basic Options
 
 ```bash
-python main.py --config CONFIG_FILE   # 設定ファイルを指定
-python main.py --export-default PATH  # デフォルト設定をエクスポート
-python main.py --verbose              # 詳細なログ出力
-python main.py --console-only         # ログをコンソールのみに出力
-python main.py --quiet                # コンソールへのログ出力を抑制
+python main.py --config CONFIG_FILE   # Specify configuration file
+python main.py --export-default PATH  # Export default configuration
+python main.py --verbose              # Detailed log output
+python main.py --console-only         # Output logs to console only
+python main.py --quiet                # Suppress console log output
 ```
 
-#### シミュレーションモード
+#### Simulation Mode
 
 ```bash
-python main.py sim                    # 通常シミュレーション実行（デフォルト）
+python main.py sim                    # Run normal simulation (default)
 ```
 
-#### 強化学習モード
+#### Reinforcement Learning Mode
 
 ```bash
-# トレーニングモード
+# Training mode
 python main.py rl --rl-mode train --epochs 100
 
-# 評価モード
+# Evaluation mode
 python main.py rl --rl-mode evaluate --load-model MODEL_PATH
 
-# その他のオプション
-python main.py rl --render            # トレーニング中も描画
-python main.py rl --rl-config FILE    # 強化学習用設定ファイル
+# Other options
+python main.py rl --render            # Render during training
+python main.py rl --rl-config FILE    # Reinforcement learning configuration file
 ```
 
-### 設定ファイル
+### Configuration Files
 
-BullBullet は 2 種類の設定ファイルを提供しています：
+BullBullet provides two types of configuration files:
 
-- `configs/config.yaml`: 通常のシミュレーション用
-- `configs/rl_config.yaml`: 強化学習用
+- `configs/config.yaml`: For normal simulation
+- `configs/rl_config.yaml`: For reinforcement learning
 
-デフォルト設定をエクスポートするには：
+To export default configuration:
 
 ```bash
 python main.py --export-default configs/my_config.yaml
 ```
 
-### 設定ファイルの構成
+### Configuration Structure
 
-設定ファイルは以下のセクションで構成されています：
+Configuration files consist of the following sections:
 
-#### ロボット設定
+#### Robot Configuration
 
 ```yaml
 robot:
   urdf_path: models/urdf/svdog2_2_description/svdog2_2.urdf
-  position: [0, 0, 0.08] # 初期位置 [x, y, z]
-  rotation: [0, 0, 135] # 初期姿勢（オイラー角）[roll, pitch, yaw]
-  max_force: 5.0 # アクチュエータの最大トルク
+  position: [0, 0, 0.08] # Initial position [x, y, z]
+  rotation: [0, 0, 135] # Initial orientation (Euler angles) [roll, pitch, yaw]
+  max_force: 5.0 # Maximum torque for actuators
 ```
 
-#### 環境設定
+#### Environment Configuration
 
 ```yaml
 environment:
-  use_gui: true # GUIを使用するかどうか
-  camera_follow: true # カメラがロボットに追従するかどうか
-  gravity: [0, 0, -9.8] # 重力ベクトル [x, y, z]
-  timestep: 0.00416667 # シミュレーションのタイムステップ (1/240)
+  use_gui: true # Whether to use GUI
+  camera_follow: true # Whether the camera follows the robot
+  gravity: [0, 0, -9.8] # Gravity vector [x, y, z]
+  timestep: 0.00416667 # Simulation timestep (1/240)
 ```
 
-#### LiDAR 設定
+#### LiDAR Configuration
 
 ```yaml
 lidar:
-  enabled: true # LiDARを有効にするかどうか
-  num_rays: 36 # レイの数
-  ray_length: 1.0 # レイの最大長
-  ray_start_length: 0.01 # レイの開始距離
-  ray_color: [0, 1, 0] # 通常時のレイの色 [R, G, B]
-  ray_hit_color: [1, 0, 0] # 衝突時のレイの色 [R, G, B]
+  enabled: true # Whether to enable LiDAR
+  num_rays: 36 # Number of rays
+  ray_length: 1.0 # Maximum ray length
+  ray_start_length: 0.01 # Ray start distance
+  ray_color: [0, 1, 0] # Normal ray color [R, G, B]
+  ray_hit_color: [1, 0, 0] # Collision ray color [R, G, B]
 ```
 
-#### 歩容設定
+#### Gait Configuration
 
 ```yaml
 gait:
-  amplitude: 0.25 # 関節角度の振幅
-  frequency: 1.5 # 歩行周期の周波数
-  pattern: trot # 歩容パターン (trot, walk, bound)
-  turn_direction: 0 # 旋回方向 (-1.0: 左, 0: 直進, 1.0: 右)
-  turn_intensity: 0 # 旋回の強さ (0.0 - 1.0)
+  amplitude: 0.25 # Joint angle amplitude
+  frequency: 1.5 # Walking cycle frequency
+  pattern: trot # Gait pattern (trot, walk, bound)
+  turn_direction: 0 # Turn direction (-1.0: left, 0: straight, 1.0: right)
+  turn_intensity: 0 # Turn intensity (0.0 - 1.0)
 ```
 
-#### 障害物設定
+#### Obstacle Configuration
 
 ```yaml
 obstacles:
-  enabled: true # 障害物を有効にするかどうか
-  course_type: simple # コースタイプ (simple, dense, random)
-  length: 5.0 # コースの長さ
+  enabled: true # Whether to enable obstacles
+  course_type: simple # Course type (simple, dense, random)
+  length: 5.0 # Course length
 ```
 
-#### ゴール設定
+#### Goal Configuration
 
 ```yaml
 goal:
-  enabled: true # ゴールを有効にするかどうか
-  position: [2.0, 0, 0] # ゴールの位置 [x, y, z]
-  radius: 0.3 # ゴールの半径
-  color: [0.0, 0.8, 0.0, 0.5] # ゴールの色 [R, G, B, A]
+  enabled: true # Whether to enable goal
+  position: [2.0, 0, 0] # Goal position [x, y, z]
+  radius: 0.3 # Goal radius
+  color: [0.0, 0.8, 0.0, 0.5] # Goal color [R, G, B, A]
 ```
 
-#### シミュレーション設定
+#### Simulation Configuration
 
 ```yaml
 simulation:
-  max_steps: 5000 # 最大シミュレーションステップ数
-  debug_interval: 100 # デバッグ情報の表示間隔
+  max_steps: 5000 # Maximum simulation steps
+  debug_interval: 100 # Debug information display interval
 ```
 
-## 歩容パターン
+## Gait Patterns
 
-BullBullet は以下の歩容パターンをサポートしています：
+BullBullet supports the following gait patterns:
 
-- `trot`: 対角の脚を同時に動かす（デフォルト）
-- `walk`: 各脚を順番に動かす
-- `bound`: 前脚と後脚のペアを同時に動かす
+- `trot`: Move diagonal legs simultaneously (default)
+- `walk`: Move each leg in sequence
+- `bound`: Move front and rear leg pairs simultaneously
 
-歩容パターンは設定ファイルで指定できます：
+Gait patterns can be specified in the configuration file:
 
 ```yaml
 gait:
-  pattern: "trot" # 'trot', 'walk', 'bound'のいずれかを指定
+  pattern: "trot" # Specify one of 'trot', 'walk', 'bound'
   amplitude: 0.25
   frequency: 1.5
 ```
 
-## 障害物コース
+## Obstacle Courses
 
-BullBullet は複数のタイプの障害物コースを生成できます：
+BullBullet can generate multiple types of obstacle courses:
 
-- `simple`: 基本的な障害物配置
-- `dense`: 密に配置された障害物
-- `random`: ランダムに配置された障害物
+- `simple`: Basic obstacle arrangement
+- `dense`: Densely arranged obstacles
+- `random`: Randomly placed obstacles
 
-コースタイプは設定ファイルで指定できます：
+Course type can be specified in the configuration file:
 
 ```yaml
 obstacles:
   enabled: true
-  course_type: "simple" # 'simple', 'dense', 'random'のいずれかを指定
+  course_type: "simple" # Specify one of 'simple', 'dense', 'random'
   length: 5.0
 ```
 
-## プロジェクト構成
+## Project Structure
 
 ```
 bull_bullet_dogrun/
-├── configs/            # 設定ファイル
-│   ├── config.yaml          # 通常シミュレーション設定
-│   └── rl_config.yaml       # 強化学習設定
-├── env/                # 環境関連のクラス
-│   ├── config_loader.py     # 設定読み込み
-│   ├── gait.py              # 歩容生成
-│   ├── goal_marker.py       # ゴールマーカー
-│   ├── lidar_sensor.py      # LiDARセンサー
-│   ├── obstacle_generator.py # 障害物生成
-│   ├── quad_env.py          # 四足環境基本クラス
-│   └── simulation_runner.py  # シミュレーション実行クラス
-├── models/             # ロボットモデル（URDF）
-├── rl/                 # 強化学習関連
-│   ├── evaluate.py          # 評価環境
-│   ├── ppo_agent.py         # PPOエージェント実装
-│   ├── rl_environment.py    # 強化学習環境
-│   └── trainer.py           # 学習トレーナー
-├── utils/              # ユーティリティ関数
-│   ├── logger.py            # ロギング管理
-│   └── logging_setup.py     # ロギング設定
-├── logs/               # ログ出力ディレクトリ
-├── results/            # 強化学習結果ディレクトリ
-└── main.py             # メインエントリーポイント
+├── configs/            # Configuration files
+│   ├── config.yaml          # Normal simulation configuration
+│   └── rl_config.yaml       # Reinforcement learning configuration
+├── env/                # Environment-related classes
+│   ├── config_loader.py     # Configuration loader
+│   ├── gait.py              # Gait generation
+│   ├── goal_marker.py       # Goal marker
+│   ├── lidar_sensor.py      # LiDAR sensor
+│   ├── obstacle_generator.py # Obstacle generation
+│   ├── quad_env.py          # Quadruped environment base class
+│   └── simulation_runner.py  # Simulation execution class
+├── models/             # Robot models (URDF)
+├── rl/                 # Reinforcement learning related
+│   ├── evaluate.py          # Evaluation environment
+│   ├── ppo_agent.py         # PPO agent implementation
+│   ├── rl_environment.py    # Reinforcement learning environment
+│   └── trainer.py           # Learning trainer
+├── utils/              # Utility functions
+│   ├── logger.py            # Logging management
+│   └── logging_setup.py     # Logging configuration
+├── logs/               # Log output directory
+├── results/            # Reinforcement learning results directory
+└── main.py             # Main entry point
 ```
 
-## 強化学習モード
+## Reinforcement Learning Mode
 
-BullBullet は、PPO（Proximal Policy Optimization）アルゴリズムを用いた強化学習モードを提供しています。ロボットの制御方針を自動的に学習し、障害物を回避しながらゴールに到達する能力を獲得できます。
+BullBullet provides a reinforcement learning mode using the PPO (Proximal Policy Optimization) algorithm. It can automatically learn robot control policies and acquire the ability to reach goals while avoiding obstacles.
 
-### 強化学習の実行
+### Running Reinforcement Learning
 
 ```bash
-# トレーニング（新規モデル）
+# Training (new model)
 python main.py rl --rl-mode train --epochs 100
 
-# 既存モデルからのトレーニング継続
+# Continue training from existing model
 python main.py rl --rl-mode train --load-model PATH --epochs 50
 
-# 評価モード
+# Evaluation mode
 python main.py rl --rl-mode evaluate --load-model PATH
 ```
 
-### 強化学習の設定
+### Reinforcement Learning Configuration
 
-強化学習の設定は `configs/rl_config.yaml` で行います：
+Reinforcement learning is configured in `configs/rl_config.yaml`:
 
 ```yaml
-# 強化学習関連設定（一部抜粋）
+# Reinforcement learning related configuration (partial excerpt)
 obstacles:
   enabled: true
-  course_type: random # 学習時にはランダムコースが効果的
+  course_type: random # Random courses are effective for learning
   length: 8.0
 
 goal:
@@ -269,34 +271,34 @@ goal:
   radius: 0.4
 ```
 
-### 学習結果
+### Learning Results
 
-トレーニング結果は `results/ppo_quadruped_TIMESTAMP/` ディレクトリに保存されます：
+Training results are saved in the `results/ppo_quadruped_TIMESTAMP/` directory:
 
-- `model_final.pt`: 学習済みモデル
-- `metrics_final.json`: 学習メトリクス
-- `learning_curves_final.png`: 学習曲線
-- `evaluation_results.json`: 評価結果
-- `hyperparameters.json`: ハイパーパラメータ
+- `model_final.pt`: Trained model
+- `metrics_final.json`: Learning metrics
+- `learning_curves_final.png`: Learning curves
+- `evaluation_results.json`: Evaluation results
+- `hyperparameters.json`: Hyperparameters
 
-### PPO アルゴリズムの実装
+### PPO Algorithm Implementation
 
-BullBullet の PPO 実装は以下の特徴を持ちます：
+BullBullet's PPO implementation has the following features:
 
-- アクターとクリティックのネットワークを含む共有モデル
-- GAE（Generalized Advantage Estimation）による安定した学習
-- エントロピー正則化による探索促進
-- KL ダイバージェンスに基づく学習制限
-- 歩容の安定性を考慮した行動選択
+- Shared model including actor and critic networks
+- Stable learning using GAE (Generalized Advantage Estimation)
+- Exploration promotion through entropy regularization
+- Learning constraints based on KL divergence
+- Action selection considering gait stability
 
-## ライセンス
+## License
 
 [MIT License](LICENSE)
 
-## 貢献
+## Contributing
 
-大きな変更を加える前には、まず Issue を開いて議論してください。
+Please open an issue to discuss before making major changes.
 
-## 作者
+## Author
 
 Shun Aizawa
