@@ -1,6 +1,6 @@
 # BullBullet - Agility
 
-![BullBullet Simulation](./bullbullet.png "BullBullet Simulation")
+![BullBullet Simulation](./image/bullbullet.png "BullBullet Simulation")
 
 BullBullet is a framework for simulating quadruped robots using PyBullet. It allows experimentation with basic robot control tasks such as gait pattern generation, obstacle avoidance, and goal reaching. It also aims to achieve autonomous behavior acquisition using reinforcement learning (PPO algorithm).
 
