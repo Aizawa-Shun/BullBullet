@@ -52,16 +52,16 @@ class LidarSensor:
         
         # Define colors for each direction
         self.direction_colors = {
-            'front': [1, 1, 1],      # White (front)
-            'left_side': [1, 1, 0],  # Yellow (left side)
-            'right_side': [1, 0, 1]  # Purple (right side)
+            'front': [0, 1, 0],      # Green (front)
+            'left_side': [0, 1, 0],  # Green (left side)
+            'right_side': [0, 1, 0]  # Green (right side)
         }
         
         # Define colors for when ray hits for each direction
         self.direction_hit_colors = {
-            'front': [0.5, 0.5, 0.5],  # Light gray (front)
-            'left_side': [1, 1, 0.5],  # Light yellow (left side)
-            'right_side': [1, 0.5, 1]  # Light purple (right side)
+            'front': [1, 0, 0],  # Red (front)
+            'left_side': [1, 0, 0],  # Red (left side)
+            'right_side': [1, 0, 0]  # Red (right side)
         }
         
         # Initialize rays
