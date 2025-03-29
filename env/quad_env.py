@@ -1,6 +1,7 @@
 import pybullet as p
 import pybullet_data
 from time import sleep
+import locale
 from env.lidar_sensor import LidarSensor
 from env.obstacle_generator import ObstacleGenerator
 from env.goal_marker import GoalMarker
@@ -32,6 +33,7 @@ class RobotEnvironment:
         p.setTimeStep(1/240)
         
         # Load ground and robot
+        locale.setlocale(locale.LC_ALL, "ja_JP.UTF-8")
         self.plane_id = p.loadURDF("plane.urdf")
         self.robot_id = self._load_robot()
         

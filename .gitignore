@@ -12,3 +12,6 @@ ENV/
 # Output
 models/
 results/
+
+# Record
+log
